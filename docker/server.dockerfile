@@ -1,5 +1,7 @@
 FROM golang:1.22-alpine3.20 as builder
 
+ENV GIN_MODE=release
+
 RUN apk add --no-cache make nodejs npm
 
 WORKDIR /server

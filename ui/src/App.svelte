@@ -1,28 +1,16 @@
 <script lang="ts">
-  import "./app.css";
-  import Counter from "./lib/Counter.svelte";
-  import * as Card from "$lib/components/ui/card";
-  import { AArrowUp } from "lucide-svelte";
+  import Home from "./routes/Home.svelte";
+  import NotFound from "./routes/NotFound.svelte";
+  import Router from "svelte-spa-router";
+
+  const routes = {
+    // Exact path
+    "/": Home,
+
+    // Catch-all
+    // This is optional, but if present it must be the last
+    "*": NotFound,
+  };
 </script>
 
-<main>
-  <div class="md:container md:mx-auto">
-    <Card.Root>
-      <Card.Header>
-        <Card.Title>Hello</Card.Title>
-        <Card.Description
-          >Click the button to increase the value</Card.Description
-        >
-      </Card.Header>
-      <Card.Content>
-        <Counter></Counter>
-      </Card.Content>
-      <Card.Footer>You'll be OK</Card.Footer>
-    </Card.Root>
-
-    <AArrowUp></AArrowUp>
-  </div>
-
-  <script lang="ts">
-  </script>
-</main>
+<Router {routes} />

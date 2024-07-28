@@ -18,4 +18,4 @@ docker-build:
 
 .PHONY: docker-run
 docker-run:
-	@docker run --rm --name svelte-server -p3000:3000 svelte-server:latest server -p 3000
+	@docker run --rm --name svelte-server -p3000:3000 svelte-server:latest server -p 3000 --apiport 3001

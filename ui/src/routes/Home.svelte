@@ -1,15 +1,24 @@
 <script lang="ts">
     import "../app.css";
-    import Counter from "../lib/Counter.svelte";
-    import * as Card from "../lib/components/ui/card";
-    import { AArrowUp } from "lucide-svelte";
+    import { onMount } from "svelte";
+    import { load } from "../api";
+    import type { Hello } from "../api";
+    import Counter from "$lib/Counter.svelte";
+    import * as Card from "$lib/components/ui/card";
+    import { ArrowUp } from "lucide-svelte";
+    import { apiData, hellodata } from "../store";
+    let data: Hello;
+    onMount(async () => {
+        data = await load();
+        apiData.set(data);
+    });
 </script>
 
 <main>
     <div class="md:container md:mx-auto">
         <Card.Root>
             <Card.Header>
-                <Card.Title>Hello</Card.Title>
+                <Card.Title>{$hellodata.hello}</Card.Title>
                 <Card.Description
                     >Click the button to increase the value</Card.Description
                 >
@@ -20,7 +29,7 @@
             <Card.Footer>You'll be OK</Card.Footer>
         </Card.Root>
 
-        <AArrowUp></AArrowUp>
+        <ArrowUp></ArrowUp>
     </div>
 
     <script lang="ts">
