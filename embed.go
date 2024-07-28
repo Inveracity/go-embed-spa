@@ -9,8 +9,9 @@ import (
 
 // Embed the build directory from the frontend.
 //
+// //go:embed ui/dist/assets/*
+//
 //go:embed ui/dist/*
-//go:embed ui/dist/assets/*
 var BuildFs embed.FS
 
 // Get the subtree of the embedded files with `build` directory as a root.
