@@ -1,15 +1,13 @@
-ui/dist:
-	cd ./ui && npm run build
-
 .PHONY: build
-build: ui/dist
+build:
+	go generate ./...
 	go build ./cmd/server
-
-.PHONY: clean
-clean:
-	@rm -f server
-	@rm -rf ui/dist
 
 .PHONY: run
 run: build
 	@./server
+
+.PHONY: clean
+clean:
+	@rm -f server
+	@rm -rf ui/build
