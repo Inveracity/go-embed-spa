@@ -1,9 +1,7 @@
-package main
+package server
 
 import (
-	"flag"
 	"fmt"
-	"log"
 	"net/http"
 
 	"github.com/inveracity/go-embed-spa/ui"
@@ -16,11 +14,7 @@ func cors(handler http.Handler) http.Handler {
 	})
 }
 
-func main() {
-	port := uint(3000)
-	flag.UintVar(&port, "p", port, "server port")
-	flag.Parse()
-
+func Server(port uint) error {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/api/v1", func(w http.ResponseWriter, r *http.Request) {
@@ -35,5 +29,5 @@ func main() {
 	handler = cors(handler)
 
 	fmt.Printf("api served at http://localhost:%d/api/v1\ngui served at http://localhost:%d/\n", port, port)
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), handler))
+	return http.ListenAndServe(fmt.Sprintf(":%d", port), handler)
 }

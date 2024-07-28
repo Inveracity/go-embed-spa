@@ -5,14 +5,15 @@ RUN apk add --no-cache make nodejs npm
 WORKDIR /server
 
 COPY go.mod /server/go.mod
+COPY go.sum /server/go.sum
 COPY cmd /server/cmd
+COPY internal /server/internal
 COPY ui /server/ui
 COPY makefile /server/makefile
-
 RUN make build
 
 FROM scratch
 
-COPY --from=builder /server/server /server
+COPY --from=builder /server/bin/cli /cli
 
-CMD ["./server"]
+ENTRYPOINT ["./cli"]

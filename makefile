@@ -1,11 +1,11 @@
 .PHONY: build
 build:
 	go generate ./...
-	go build -ldflags="-w -s" ./cmd/server
+	go build -ldflags="-w -s" -o ./bin/cli ./cmd/cli
 
 .PHONY: run
 run: build
-	@./server
+	@./bin/cli server
 
 .PHONY: clean
 clean:
@@ -18,4 +18,4 @@ docker-build:
 
 .PHONY: docker-run
 docker-run:
-	@docker run --rm --name svelte-server -p3000:3000 svelte-server:latest
+	@docker run --rm --name svelte-server -p3000:3000 svelte-server:latest server -p 3000
