@@ -8,7 +8,7 @@ make run
 ```
 
 http://localhost:3000/
-http://localhost:3001/v1
+http://localhost:3000/api
 
 ## Debug UI with hot-reload
 

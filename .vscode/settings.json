@@ -1,0 +1,12 @@
+{
+    "[svelte]": {
+        "editor.detectIndentation": false,
+        "editor.indentSize": 2,
+        "editor.defaultFormatter": "svelte.svelte-vscode"
+    },
+    "[typescript]": {
+        "editor.detectIndentation": false,
+        "editor.indentSize": 2,
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    }
+}

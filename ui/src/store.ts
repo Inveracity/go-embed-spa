@@ -11,8 +11,8 @@ For our use case, we only care about the drink names, not the other information.
 Here, we'll create a derived store to hold the drink names.
 **/
 export const hellodata = derived(apiData, ($apiData) => {
-    if ($apiData) {
-        return $apiData;
-    }
-    return [];
+  if ($apiData) {
+    return $apiData;
+  }
+  return [];
 });
