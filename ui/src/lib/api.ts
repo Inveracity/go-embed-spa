@@ -3,7 +3,7 @@ export type Hello = {
 }
 
 export async function load(): Promise<Hello> {
-  const res = await fetch(`/api`);
+  const res = await fetch(`${import.meta.env.THING_BACKEND_URL}/api`);
 
   if (!res.ok) {
     return { "hello": "nothing" }
