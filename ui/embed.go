@@ -2,20 +2,13 @@ package ui
 
 import (
 	"embed"
-	"io/fs"
-	"log"
-	"net/http"
+
+	"github.com/labstack/echo/v4"
 )
 
 //go:generate npm run build
-//go:embed dist/*
-var files embed.FS
+//go:embed all:dist
+var distDir embed.FS
 
-func SvelteKitFS() http.FileSystem {
-	fsys, err := fs.Sub(files, "dist")
-	if err != nil {
-		log.Fatal(err)
-	}
-	filesystem := http.FS(fsys)
-	return filesystem
-}
+// DistDirFS contains the embedded dist directory files (without the "dist" prefix)
+var DistDirFS = echo.MustSubFS(distDir, "dist")

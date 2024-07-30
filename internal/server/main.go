@@ -1,28 +1,27 @@
 package server
 
 import (
+	"fmt"
 	"net/http"
 
-	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/gin"
 	"github.com/inveracity/go-embed-spa/ui"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
-func Server() http.Handler {
-	r := gin.New()
-	r.Use(cors.Default())
-	r.StaticFS("/", ui.SvelteKitFS())
+func Server(port uint) {
+	e := echo.New()
 
-	return r
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
+
+	e.GET("/api", hello)
+	e.GET("/*", echo.StaticDirectoryHandler(ui.DistDirFS, false))
+
+	e.Logger.Fatal(e.Start(fmt.Sprintf("0.0.0.0:%v", port)))
 }
 
-func ServerAPI() http.Handler {
-	r := gin.New()
-	r.Use(cors.Default())
-
-	r.GET("/v1", func(c *gin.Context) {
-		c.JSON(200, gin.H{"hello": "world"})
-	})
-
-	return r
+// Handler
+func hello(c echo.Context) error {
+	return c.JSON(http.StatusOK, map[string]string{"Hello": "World!"})
 }
