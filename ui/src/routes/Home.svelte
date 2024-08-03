@@ -1,34 +1,71 @@
 <script lang="ts">
   import "../app.css";
-  import { onMount } from "svelte";
-  import Counter from "$lib/Counter.svelte";
-  import * as Card from "$lib/components/ui/card/";
-  import ArrowUp from "lucide-svelte/icons/arrow-up";
-  import { apiData } from "../store";
-  import { subscribe, state } from "$lib/events";
+  import { onDestroy } from "svelte";
+  import { subscribe, unsubscribe, es, messages, connected } from "$lib/events";
+  import Button from "$lib/components/ui/button/button.svelte";
+  import Separator from "$lib/components/ui/separator/separator.svelte";
+  import BACKEND_BASE_URL from "$lib/config";
+  import Wifi from "lucide-svelte/icons/wifi";
+  import Wifioff from "lucide-svelte/icons/wifi-off";
+  import {
+    diagSubscribe,
+    diagUnsubscribe,
+    diagEs,
+    diagMessages,
+    diagConnected,
+  } from "$lib/eventsDiags";
 
-  onMount(subscribe);
+  // Automatically unsubscribe when leaving the page
+  onDestroy(() => {
+    unsubscribe($es);
+    diagUnsubscribe($diagEs);
+  });
+
+  // Handle user manually unsubscribing from server side events
+  function closeHandler() {
+    unsubscribe($es);
+    diagUnsubscribe($diagEs);
+  }
+
+  // Handle user subscribing to server side events
+  function openHandler() {
+    if (!$connected) {
+      es.set(new EventSource(`${BACKEND_BASE_URL}/stream`));
+      subscribe($es);
+    }
+    if (!$diagConnected) {
+      diagEs.set(new EventSource(`${BACKEND_BASE_URL}/diagnostics`));
+      diagSubscribe($diagEs);
+    }
+  }
 </script>
 
-<main>
-  <div class="md:container md:mx-auto">
-    <Card.Root>
-      <Card.Header>
-        <Card.Title>{$apiData.hello}</Card.Title>
-        <Card.Description
-          >Click the button to increase the value</Card.Description
-        >
-      </Card.Header>
-      <Card.Content>
-        <Counter></Counter>
-      </Card.Content>
-      <Card.Footer>
-        {$state}
-      </Card.Footer>
-    </Card.Root>
-
-    <ArrowUp></ArrowUp>
+<div class="flex flex-col">
+  <div class="flex flex-col space-y-2 justify-center items-center">
+    {#if $connected && $diagConnected}
+      <Wifi />
+      <Button class="w-36" on:click={closeHandler}>Disconnect</Button>
+    {:else}
+      <Wifioff />
+      <Button class="w-36" on:click={openHandler}>Connect</Button>
+    {/if}
   </div>
-
-  <p>{import.meta.env.THING_BACKEND_URL}</p>
-</main>
+  <div class="my-4">
+    <Separator />
+  </div>
+  <div class="items-center">
+    <div class="flex h-5 items-center justify-center space-x-4 text-lg">
+      <Separator orientation="vertical" />
+      <div class="flex flex-col items-center w-96">
+        <p>Time</p>
+        <p>{$messages}</p>
+      </div>
+      <Separator orientation="vertical" />
+      <div class="flex flex-col items-center w-96">
+        <p>Memory</p>
+        <p>{$diagMessages?.usedPercent || ""}%</p>
+      </div>
+      <Separator orientation="vertical" />
+    </div>
+  </div>
+</div>

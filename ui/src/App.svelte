@@ -1,11 +1,13 @@
 <script lang="ts">
-  import Home from "./routes/Home.svelte";
   import NotFound from "./routes/NotFound.svelte";
   import Router from "svelte-spa-router";
+  import { wrap } from "svelte-spa-router/wrap";
 
   const routes = {
     // Exact path
-    "/": Home,
+    "/": wrap({
+      asyncComponent: () => import("./routes/Home.svelte"),
+    }),
 
     // Catch-all
     // This is optional, but if present it must be the last
@@ -13,4 +15,6 @@
   };
 </script>
 
-<Router {routes} />
+<div class="container mt-8 pt-2 w-[750px] h-96 uto border rounded-xl">
+  <Router {routes} />
+</div>

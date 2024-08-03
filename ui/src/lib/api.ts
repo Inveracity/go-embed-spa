@@ -1,16 +1,14 @@
+import BACKEND_BASE_URL from "./config"
 export type Hello = {
   hello: string
 }
 
 export async function load(): Promise<Hello> {
-  const res = await fetch(`${import.meta.env.THING_BACKEND_URL}/api`);
+  const res = await fetch(`${BACKEND_BASE_URL}/api`);
 
   if (!res.ok) {
     return { "hello": "nothing" }
   }
 
-  const item = await res.json();
-  console.log(item)
-  return item;
-
+  return await res.json();
 }

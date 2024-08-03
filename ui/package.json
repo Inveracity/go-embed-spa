@@ -24,7 +24,7 @@
     "vite": "^5.3.4"
   },
   "dependencies": {
-    "bits-ui": "^0.21.12",
+    "bits-ui": "^0.21.13",
     "clsx": "^2.1.1",
     "lucide-svelte": "^0.417.0",
     "svelte-spa-router": "^4.0.1",

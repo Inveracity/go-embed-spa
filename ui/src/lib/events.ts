@@ -1,14 +1,21 @@
 import { writable } from "svelte/store";
 
-export const state = writable<string>("");
+export const messages = writable<string>("");
+export const es = writable<EventSource>()
+export const connected = writable<boolean>(false);
 
-export function subscribe() {
-  const es = new EventSource("http://localhost:3000/stream");
-
-  // Create a new websocket
+export function subscribe(es: EventSource) {
+  connected.set(true)
+  console.log("Subscribed")
   es.onmessage = async function (event) {
     const data = event.data;
-    state.set(data);
+    messages.set(data);
     return () => es.close();
   };
+}
+
+export function unsubscribe(es: EventSource) {
+  connected.set(false)
+  es.close()
+  console.log("Unsubscribed")
 }

@@ -2,6 +2,7 @@
   "recommendations": [
     "svelte.svelte-vscode",
     "golang.go",
-    "ms-vscode.vscode-typescript-next"
+    "ms-vscode.vscode-typescript-next",
+    "bradlc.vscode-tailwindcss"
   ]
 }
