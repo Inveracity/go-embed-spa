@@ -33,43 +33,39 @@ func (a *Api) Stream(c echo.Context) error {
 			log.Printf("SSE client disconnected, ip: %v", c.RealIP())
 			return nil
 		case <-ticker.C:
-			event := Event{
-				Data: []byte(time.Now().Format(time.RFC1123)),
-			}
-			if err := event.MarshalTo(w); err != nil {
+			err := a.sendTime(w)
+			if err != nil {
 				return err
 			}
-			w.Flush()
+			err = a.sendMemory(w)
+			if err != nil {
+				return err
+			}
 		}
 	}
 }
 
-func (a *Api) Diagnostics(c echo.Context) error {
-	log.Printf("SSE client connected, ip: %v", c.RealIP())
-
-	w := c.Response()
-	w.Header().Set("Content-Type", "text/event-stream")
-	w.Header().Set("Cache-Control", "no-cache")
-	w.Header().Set("Connection", "keep-alive")
-
-	ticker := time.NewTicker(1 * time.Second)
-	defer ticker.Stop()
-	for {
-		select {
-		case <-c.Request().Context().Done():
-			log.Printf("SSE client disconnected, ip: %v", c.RealIP())
-			return nil
-		case <-ticker.C:
-			v, _ := mem.VirtualMemory()
-			b, _ := json.Marshal(v)
-			event := Event{
-				Event: []byte("diagnostics"),
-				Data:  b,
-			}
-			if err := event.MarshalTo(w); err != nil {
-				return err
-			}
-			w.Flush()
-		}
+func (a *Api) sendTime(w *echo.Response) error {
+	event := Event{
+		Data: []byte(time.Now().Format(time.RFC1123)),
 	}
+	if err := event.MarshalTo(w); err != nil {
+		return err
+	}
+	w.Flush()
+	return nil
+}
+
+func (a *Api) sendMemory(w *echo.Response) error {
+	v, _ := mem.VirtualMemory()
+	b, _ := json.Marshal(v)
+	event := Event{
+		Event: []byte("diagnostics"),
+		Data:  b,
+	}
+	if err := event.MarshalTo(w); err != nil {
+		return err
+	}
+	w.Flush()
+	return nil
 }

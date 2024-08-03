@@ -24,7 +24,6 @@ func Server(port uint) {
 	api := Api{}
 	e.GET("/api", api.Hello)
 	e.GET("/stream", api.Stream)
-	e.GET("/diagnostics", api.Diagnostics)
 	e.GET("/*", echo.StaticDirectoryHandler(ui.DistDirFS, false))
 
 	e.Logger.Fatal(e.Start(fmt.Sprintf("0.0.0.0:%v", port)))
