@@ -1,20 +1,30 @@
 # Embed Svelte SPA into Go binary
 
+This is a learning project
+
+
 
 ## Run the server
 
 ```sh
-make run
+make server
 ```
 
-http://localhost:3000/
-http://localhost:3000/api
+<http://localhost:3000/>
 
 ## Debug UI with hot-reload
 
 ```sh
-cd ui
-npm run dev
+make dev
 ```
 
-http://localhost:5137/
+<http://localhost:5137/>
+
+## Build
+
+```
+make build
+./bin/cli server
+```
+
+<http://localhost:3000/>

@@ -4,9 +4,9 @@ export const messages = writable<string>("");
 export const es = writable<EventSource>()
 export const connected = writable<boolean>(false);
 export const memoryMsgs = writable<Memory>();
+export const syslogMsgs = writable<string>();
 
 export function subscribe(es: EventSource) {
-
   es.onopen = function (_) {
     connected.set(true)
     console.log("Subscribed")
@@ -16,9 +16,14 @@ export function subscribe(es: EventSource) {
     messages.set(data);
     return () => es.close();
   };
-  es.addEventListener("diagnostics", async function (event) {
+  es.addEventListener("memory", async function (event) {
     const data: Memory = JSON.parse(event.data);
     memoryMsgs.set(data);
+    return () => es.close();
+  })
+  es.addEventListener("syslog", async function (event) {
+    const data = event.data;
+    syslogMsgs.set(data);
     return () => es.close();
   })
   es.onerror = function (_) {
