@@ -13,6 +13,7 @@
     "@sveltejs/vite-plugin-svelte": "^3.1.1",
     "@tsconfig/svelte": "^5.0.4",
     "@types/node": "^22.0.0",
+    "@types/ws": "^8.5.12",
     "autoprefixer": "^10.4.19",
     "postcss": "^8.4.38",
     "svelte": "^4.2.18",
@@ -28,6 +29,7 @@
     "lucide-svelte": "^0.417.0",
     "svelte-spa-router": "^4.0.1",
     "tailwind-merge": "^2.4.0",
-    "tailwind-variants": "^0.2.1"
+    "tailwind-variants": "^0.2.1",
+    "ws": "^8.18.0"
   }
 }

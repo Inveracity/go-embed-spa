@@ -1,17 +1,13 @@
 <script lang="ts">
   import "../app.css";
   import { onMount } from "svelte";
-  import { load } from "$lib/api";
-  import type { Hello } from "$lib/api";
   import Counter from "$lib/Counter.svelte";
-  import * as Card from "$lib/components/ui/card";
-  import { ArrowUp } from "lucide-svelte";
+  import * as Card from "$lib/components/ui/card/";
+  import ArrowUp from "lucide-svelte/icons/arrow-up";
   import { apiData } from "../store";
-  let data: Hello;
-  onMount(async () => {
-    data = await load();
-    apiData.set(data);
-  });
+  import { subscribe, state } from "$lib/events";
+
+  onMount(subscribe);
 </script>
 
 <main>
@@ -26,7 +22,9 @@
       <Card.Content>
         <Counter></Counter>
       </Card.Content>
-      <Card.Footer>You'll be OK</Card.Footer>
+      <Card.Footer>
+        {$state}
+      </Card.Footer>
     </Card.Root>
 
     <ArrowUp></ArrowUp>
