@@ -15,6 +15,6 @@
   };
 </script>
 
-<div class="container mt-8 pt-2 w-[750px] h-96 uto border rounded-xl">
+<div class="container mt-8 pt-2 w-[750px]">
   <Router {routes} />
 </div>
