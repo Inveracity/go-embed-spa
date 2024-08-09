@@ -21,8 +21,8 @@ func (a *App) Run() error {
 			usage: cli --help
 			`,
 		),
-		Run: func(cmd *cobra.Command, args []string) {
-			cmd.Help()
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return cmd.Help()
 		},
 	}
 
