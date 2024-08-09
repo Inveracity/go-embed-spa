@@ -30,8 +30,8 @@ func (a *Api) Stream(c echo.Context) error {
 	ticker := time.NewTicker(1 * time.Second)
 	defer ticker.Stop()
 
-	sumchan := make(chan string)
-	go syslog(sumchan)
+	syslogchan := make(chan string)
+	go syslog(syslogchan)
 
 	for {
 		select {
@@ -47,7 +47,7 @@ func (a *Api) Stream(c echo.Context) error {
 			if err != nil {
 				return err
 			}
-		case val := <-sumchan:
+		case val := <-syslogchan:
 			err := a.sendSyslog(val, w)
 			if err != nil {
 				return err

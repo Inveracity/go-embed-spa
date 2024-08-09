@@ -21,11 +21,7 @@ export function subscribe(es: EventSource) {
     memoryMsgs.set(data);
     return () => es.close();
   })
-  es.addEventListener("syslog", async function (event) {
-    const data = event.data;
-    syslogMsgs.set(data);
-    return () => es.close();
-  })
+
   es.onerror = function (_) {
     connected.set(false)
     messages.set("")

@@ -15,24 +15,10 @@
   import BACKEND_BASE_URL from "$lib/config";
   import Wifi from "lucide-svelte/icons/wifi";
   import Wifioff from "lucide-svelte/icons/wifi-off";
-  const connect = () => {
-    if (!$connected) {
-      es.set(new EventSource(`${BACKEND_BASE_URL}/stream`));
-      subscribe($es);
-    }
-  };
-  onMount(() => {
-    connect();
-  });
-  // Automatically unsubscribe when leaving the page
-  onDestroy(() => {
-    unsubscribe($es);
-  });
-
-  // Handle user manually unsubscribing from server side events
-  function disconnect() {
-    unsubscribe($es);
-  }
+  import * as Tabs from "$lib/components/ui/tabs/index";
+  import { Progress } from "$lib/components/ui/progress/index";
+  import Syslog from "src/routes/Syslog.svelte";
+  import Time from "$lib/components/Time.svelte";
 </script>
 
 <div class="flex flex-col">
@@ -45,25 +31,64 @@
       <Button class="w-36" on:click={connect}>Connect</Button>
     {/if}
   </div>
+  <Time>{$messages}</Time>
   <div class="my-4">
     <Separator />
   </div>
-  <div class="items-center">
-    <div class="flex items-center justify-center space-x-4 text-lg h-[100px]">
-      <Separator orientation="vertical" />
-      <div class="flex flex-col items-center w-96">
-        <p>Time</p>
-        <p>{$messages}</p>
-      </div>
-      <Separator orientation="vertical" />
-      <div class="flex flex-col items-center w-96">
-        <p>Memory</p>
-        <p>{$memoryMsgs?.usedPercent || ""}%</p>
-      </div>
-      <Separator orientation="vertical" />
+  <Tabs.Root value="syslog" class="w-[400]">
+    <Tabs.List class="grid w-full grid-cols-2">
+      <Tabs.Trigger value="syslog">syslog</Tabs.Trigger>
+      <Tabs.Trigger value="memory">memory</Tabs.Trigger>
+    </Tabs.List>
+    <Tabs.Content value="syslog">
+      <Syslog />
+    </Tabs.Content>
+    <Tabs.Content value="memory">
+      {$memoryMsgs?.usedPercent || ""}%
+      <Progress
+        value={$memoryMsgs?.usedPercent || 0}
+        max={100}
+        class="w-[60%]"
+      />
+    </Tabs.Content>
+  </Tabs.Root>
+</div>
+
+<div class="grid h-screen w-full pl-[53px]">
+  <aside class="inset-y fixed left-0 z-20 flex h-full flex-col border-r">
+    <div class="border-b p-2">
+      <Button variant="outline" size="icon" aria-label="Home">
+        <p>home</p>
+      </Button>
     </div>
-    <div>
-      {$syslogMsgs}
-    </div>
+    <nav class="grid gap-1 p-2">
+      <Button variant="ghost" size="icon" class="rounded-lg" aria-label="Models"
+        ><p>syslog</p></Button
+      >
+      <Button variant="ghost" size="icon" class="rounded-lg" aria-label="API"
+      ></Button>
+    </nav>
+    <nav class="mt-auto grid gap-1 p-2">
+      <Button
+        variant="ghost"
+        size="icon"
+        class="mt-auto rounded-lg"
+        aria-label="Help"><p>memory</p></Button
+      >
+      <Button
+        variant="ghost"
+        size="icon"
+        class="mt-auto rounded-lg"
+        aria-label="Account"
+      ></Button>
+    </nav>
+  </aside>
+  <div class="flex flex-col">
+    <header
+      class="bg-background sticky top-0 z-10 flex h-[57px] items-center gap-1 border-b px-4"
+    >
+      <h1 class="text-xl font-semibold">Playground</h1>
+    </header>
+    <p>content</p>
   </div>
 </div>
