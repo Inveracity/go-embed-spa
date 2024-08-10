@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { Hello } from '$lib/api';
   import BACKEND_BASE_URL from '$lib/config';
   import { apiData } from '$lib/store';
+  import type { Hello } from '$lib/types';
   import { onMount } from 'svelte';
 
   onMount(async () => {
