@@ -3,6 +3,7 @@ package server
 import (
 	"fmt"
 
+	"github.com/inveracity/go-embed-spa/internal/server/events"
 	"github.com/inveracity/go-embed-spa/ui"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -23,7 +24,9 @@ func Server(port uint) {
 
 	api := Api{}
 	e.GET("/api", api.Hello)
-	e.GET("/stream", api.Stream)
+	e.GET("/stream/time", events.TimeStream)
+	e.GET("/stream/memory", events.StreamMemory)
+	e.GET("/stream/syslog", events.StreamSyslog)
 	e.GET("/*", echo.StaticDirectoryHandler(ui.DistDirFS, false))
 
 	e.Logger.Fatal(e.Start(fmt.Sprintf("0.0.0.0:%v", port)))
