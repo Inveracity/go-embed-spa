@@ -7,8 +7,8 @@
     syslogMsgs,
     unsubscribe,
   } from '$lib/events';
+  import LoaderCircle from 'lucide-svelte/icons/loader-circle';
   import { onDestroy, onMount, tick } from 'svelte';
-
   let scrollAreaElement: Element;
 
   async function syslogHandler(event: MessageEvent<any>) {
@@ -49,6 +49,9 @@
 
 <main class="flex flex-col items-center gap-4">
   <h1 class="text-3xl font-semibold">Syslog</h1>
+  {#if $syslogMsgs.length <= 1}
+    <LoaderCircle class="animate-spin" />
+  {/if}
   <div
     bind:this={scrollAreaElement}
     class=" bg-muted/100 h-[70vh] w-[80%] overflow-auto rounded-md border">
