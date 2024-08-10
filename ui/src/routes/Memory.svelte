@@ -1,14 +1,14 @@
 <script lang="ts">
-  import BACKEND_BASE_URL from "$lib/config";
-  import { type Memory } from "$lib/types";
+  import BACKEND_BASE_URL from '$lib/config';
   import {
+    connected,
     es,
     memoryMsgs,
-    connected,
     subscribe,
     unsubscribe,
-  } from "$lib/events";
-  import { onDestroy, onMount } from "svelte";
+  } from '$lib/events';
+  import { type Memory } from '$lib/types';
+  import { onDestroy, onMount } from 'svelte';
 
   const memHandler = async (event: MessageEvent<any>) => {
     if (event.data) {
@@ -27,11 +27,11 @@
 
   onMount(() => {
     connect();
-    $es.addEventListener("memory", memHandler, true);
+    $es.addEventListener('memory', memHandler, true);
   });
 
   onDestroy(() => {
-    $es.removeEventListener("memory", memHandler, true);
+    $es.removeEventListener('memory', memHandler, true);
     unsubscribe($es);
   });
 
@@ -40,7 +40,7 @@
 </script>
 
 <main class="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10">
-  <div class="mx-auto grid w-full max-w-6xl gap-2 justify-center text-center">
+  <div class="mx-auto grid w-full max-w-6xl justify-center gap-2 text-center">
     <h1 class="text-3xl font-semibold">Memory</h1>
     <p class="text-mono text-xl">{mem}%</p>
   </div>

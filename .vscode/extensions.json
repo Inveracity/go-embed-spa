@@ -3,6 +3,7 @@
     "svelte.svelte-vscode",
     "golang.go",
     "ms-vscode.vscode-typescript-next",
-    "bradlc.vscode-tailwindcss"
+    "bradlc.vscode-tailwindcss",
+    "esbenp.prettier-vscode"
   ]
 }

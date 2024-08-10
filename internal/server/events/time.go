@@ -34,7 +34,8 @@ func TimeStream(c echo.Context) error {
 
 func sendTime(w *echo.Response) error {
 	event := Event{
-		Data: []byte(time.Now().Format(time.RFC1123)),
+		Event: []byte("time"),
+		Data:  []byte(time.Now().Format(time.RFC1123)),
 	}
 	if err := event.MarshalTo(w); err != nil {
 		return err

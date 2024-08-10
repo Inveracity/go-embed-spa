@@ -1,15 +1,15 @@
 <script lang="ts">
-  import BACKEND_BASE_URL from "$lib/config";
+  import BACKEND_BASE_URL from '$lib/config';
   import {
-    es,
-    syslogMsgs,
     connected,
+    es,
     subscribe,
+    syslogMsgs,
     unsubscribe,
-  } from "$lib/events";
+  } from '$lib/events';
+  import { onDestroy, onMount, tick } from 'svelte';
 
-  import { onDestroy, onMount, tick } from "svelte";
-  let scrollAreaElement: any;
+  let scrollAreaElement: Element;
 
   async function syslogHandler(event: MessageEvent<any>) {
     const data = event.data;
@@ -30,11 +30,11 @@
 
   onMount(() => {
     connect();
-    $es.addEventListener("syslog", syslogHandler, false);
+    $es.addEventListener('syslog', syslogHandler, false);
   });
 
   onDestroy(() => {
-    $es.removeEventListener("syslog", syslogHandler, false);
+    $es.removeEventListener('syslog', syslogHandler, false);
     unsubscribe($es);
     $syslogMsgs.length = 0; // zero out the array after unsubscribing
   });
@@ -42,20 +42,19 @@
   const scrollToBottom = async (node: Element) => {
     node.scroll({
       top: node.scrollHeight,
-      behavior: "instant",
+      behavior: 'instant',
     });
   };
 </script>
 
-<main class="flex flex-col gap-4 items-center">
+<main class="flex flex-col items-center gap-4">
   <h1 class="text-3xl font-semibold">Syslog</h1>
   <div
     bind:this={scrollAreaElement}
-    class=" h-[70vh] w-[80%] rounded-md border bg-muted/100 overflow-auto"
-  >
+    class=" bg-muted/100 h-[70vh] w-[80%] overflow-auto rounded-md border">
     <div class="p-5">
       {#each $syslogMsgs as msg}
-        <p class="font-mono text-nowrap text-sm">{msg}</p>
+        <p class="text-nowrap font-mono text-sm">{msg}</p>
       {/each}
     </div>
   </div>

@@ -1,8 +1,12 @@
 {
+    "html.format.wrapAttributes": "force-aligned",
     "[svelte]": {
         "editor.detectIndentation": false,
         "editor.indentSize": 2,
-        "editor.defaultFormatter": "svelte.svelte-vscode"
+        "editor.defaultFormatter": "svelte.svelte-vscode",
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "always",
+        }
     },
     "[typescript]": {
         "editor.detectIndentation": false,
