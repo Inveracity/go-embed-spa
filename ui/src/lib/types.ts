@@ -38,3 +38,7 @@ export interface Memory {
   hugePageSize: number
   anonHugePages: number
 }
+
+export type Hello = {
+  hello: string
+}

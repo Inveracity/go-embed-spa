@@ -3,6 +3,7 @@ package events
 import (
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/hpcloud/tail"
 	"github.com/labstack/echo/v4"
@@ -38,6 +39,7 @@ func syslogRead(c chan string) {
 		panic(err)
 	}
 	for line := range t.Lines {
+		time.Sleep(80 * time.Microsecond)
 		c <- line.Text
 	}
 }

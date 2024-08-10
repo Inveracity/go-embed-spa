@@ -1,6 +1,7 @@
 <script lang="ts">
   import Time from '$lib/components/Time.svelte';
   import { connected } from '$lib/events';
+  import { routeLoadingState } from '$lib/store';
   import Squareterminal from 'lucide-svelte/icons/square-terminal';
   import Wifi from 'lucide-svelte/icons/wifi';
   import Wifioff from 'lucide-svelte/icons/wifi-off';
@@ -28,6 +29,14 @@
 
   let menuStyle =
     'text-muted-foreground hover:text-foreground transition-colors';
+
+  function routeLoading(event: any) {
+    routeLoadingState.set(true);
+  }
+
+  function routeLoaded(event: any) {
+    routeLoadingState.set(false);
+  }
 </script>
 
 <div class="flex min-h-screen w-full flex-col">
@@ -58,5 +67,13 @@
       </div>
     </nav>
   </header>
-  <Router {routes} />
+  <div class="container">
+    <Router
+      {routes}
+      on:routeLoading={routeLoading}
+      on:routeLoaded={routeLoaded} />
+    {#if $routeLoadingState}
+      <p>{$routeLoadingState}</p>
+    {/if}
+  </div>
 </div>

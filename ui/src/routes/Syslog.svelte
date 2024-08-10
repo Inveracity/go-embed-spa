@@ -1,12 +1,6 @@
 <script lang="ts">
   import BACKEND_BASE_URL from '$lib/config';
-  import {
-    connected,
-    es,
-    subscribe,
-    syslogMsgs,
-    unsubscribe,
-  } from '$lib/events';
+  import { es, subscribe, syslogMsgs, unsubscribe } from '$lib/events';
   import LoaderCircle from 'lucide-svelte/icons/loader-circle';
   import { onDestroy, onMount, tick } from 'svelte';
   let scrollAreaElement: Element;
@@ -21,16 +15,10 @@
     return () => $es.close();
   }
 
-  const connect = () => {
-    if (!$connected) {
-      es.set(new EventSource(`${BACKEND_BASE_URL}/stream/syslog`));
-      subscribe($es);
-    }
-  };
-
   onMount(() => {
-    connect();
+    es.set(new EventSource(`${BACKEND_BASE_URL}/stream/syslog`));
     $es.addEventListener('syslog', syslogHandler, false);
+    subscribe($es);
   });
 
   onDestroy(() => {
