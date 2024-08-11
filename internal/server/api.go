@@ -3,16 +3,13 @@ package server
 import (
 	"net/http"
 
+	"github.com/inveracity/go-embed-spa/internal/common"
 	"github.com/labstack/echo/v4"
 )
 
 type Api struct {
 }
 
-type Hello struct {
-	Hello string `json:"hello"`
-}
-
 func (a *Api) Hello(c echo.Context) error {
-	return c.JSON(http.StatusOK, Hello{Hello: "world"})
+	return c.JSON(http.StatusOK, common.Hello{Hello: "world"})
 }

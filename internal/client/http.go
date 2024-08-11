@@ -6,7 +6,7 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/inveracity/go-embed-spa/internal/server"
+	"github.com/inveracity/go-embed-spa/internal/common"
 )
 
 type Client struct {
@@ -30,7 +30,7 @@ func (c *Client) Hello() (string, error) {
 		return "", err
 	}
 
-	var hello server.Hello
+	var hello common.Hello
 	if err := json.Unmarshal(body, &hello); err != nil {
 		return "", err
 	}
