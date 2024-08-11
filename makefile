@@ -14,7 +14,7 @@ dev: ui/node_modules
 	@cd ui && npm run dev
 
 docker-build:
-	@docker build -t thingserver:latest -f docker/server.dockerfile .
+	@BUILDKIT_PROGRESS=plain docker build -t thingserver:latest -f docker/server.dockerfile .
 
 docker-run:
 	@docker run --rm --name thingserver -p3000:3000 thingserver:latest server -a 0.0.0.0 -p 3000
@@ -22,4 +22,10 @@ docker-run:
 lint:
 	@golangci-lint run
 
-.PHONY: install-ui build server dev docker-build docker-run lint
+/usr/local/bin/upx:
+	@echo "installing upx..."
+	@bash scripts/install_upx.sh
+
+install-upx: /usr/local/bin/upx
+
+.PHONY: install-ui build server dev docker-build docker-run lint install-upx

@@ -1,6 +1,6 @@
 FROM golang:1.22-alpine3.20 as builder
 
-RUN apk add --no-cache make nodejs npm
+RUN apk add --no-cache make nodejs npm curl bash sudo
 
 WORKDIR /server
 
@@ -10,7 +10,10 @@ COPY cmd /server/cmd
 COPY internal /server/internal
 COPY ui /server/ui
 COPY makefile /server/makefile
+COPY --chmod=755 scripts/install_upx.sh /server/scripts/install_upx.sh
 RUN make build
+RUN make install-upx
+RUN upx -f -9 bin/cli
 
 FROM scratch
 
