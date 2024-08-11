@@ -2,7 +2,8 @@
 
 This is a learning project.
 
-The primary focus is on building a Svelte SPA (Single-page Application) that can be shipped as Golang binary. And docker container. It includes a CLI interface that will be used to pass in runtime environment variables.
+The primary focus is on building a Svelte SPA (Single-page Application) that can be shipped as Golang binary. And docker container.
+It includes a CLI interface that will be used to pass in runtime environment variables.
 The server side provides an API and SSE (Server Side Events) to stream data to the frontend.
 
 I took inspiration from projects like Hashicorp Nomad and PocketBase.
@@ -19,6 +20,8 @@ Start the server
 ./bin/cli server
 ```
 
+Optionally open the UI in a browser <http://localhost:3000/>
+
 Run the CLI command `hello` which calls the API
 
 ```sh
@@ -32,9 +35,9 @@ export THING_SERVER_PORT=3001
 export THING_ENDPOINT="http://localhost:3001"
 ```
 
-## Build binary
+## Build
 
-```sh
+```
 make build
 ```
 
@@ -53,12 +56,3 @@ make dev
 ```
 
 <http://localhost:5137/>
-
-## Build
-
-```
-make build
-./bin/cli server
-```
-
-<http://localhost:3000/>
