@@ -14,8 +14,9 @@ type CmdHello struct {
 
 func (h *CmdHello) Command() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "hello",
-		Short: "Responds with \"world\"",
+		Use:           "hello",
+		Short:         "Responds with \"world\"",
+		SilenceErrors: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			result, err := h.Client.Hello()
 			if err != nil {

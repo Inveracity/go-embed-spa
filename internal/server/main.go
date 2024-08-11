@@ -9,13 +9,14 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
-func Server(port uint) {
+func Server(bind string, port uint) {
 	e := echo.New()
 	e.HideBanner = true
 	e.HidePort = true
+	e.ListenerNetwork = "tcp4"
 
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
-		Format: "${method} ${status} ${uri}\n",
+		Format: "${method} ${status} ${uri} ${remote_ip}\n",
 	}))
 	e.Use(middleware.Recover())
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
@@ -29,6 +30,7 @@ func Server(port uint) {
 	e.GET("/stream/memory", events.StreamMemory)
 	e.GET("/stream/syslog", events.StreamSyslog)
 	e.GET("/*", echo.StaticDirectoryHandler(ui.DistDirFS, false))
-	fmt.Printf("⇨ http server started on http://0.0.0.0:%v\n", port)
-	e.Logger.Fatal(e.Start(fmt.Sprintf("0.0.0.0:%v", port)))
+
+	fmt.Printf("\n   running http://%s:%v\n\n", bind, port)
+	e.Logger.Fatal(e.Start(fmt.Sprintf("%s:%v", bind, port)))
 }
