@@ -1,51 +1,31 @@
 package cli
 
 import (
-	"encoding/json"
 	"fmt"
-	"io"
-	"net/http"
 
 	"github.com/spf13/cobra"
 
-	"github.com/inveracity/go-embed-spa/internal/server"
+	"github.com/inveracity/go-embed-spa/internal/client"
 )
 
-type Get struct {
+type CmdHello struct {
+	Client *client.Client
 }
 
-func (g *Get) Command() *cobra.Command {
+func (h *CmdHello) Command() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "get",
-		Short: "get data from server",
-
+		Use:   "hello",
+		Short: "responds with \"world\"",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			result, err := g.getData()
+			result, err := h.Client.Hello()
+			if err != nil {
+				return err
+			}
 			fmt.Println(result)
-			return err
+			return nil
 		},
 	}
 
 	cmd.Flags().SortFlags = false
 	return cmd
-}
-
-func (g *Get) getData() (string, error) {
-	resp, err := http.Get("http://localhost:3000/api")
-	if err != nil {
-		return "", err
-	}
-	defer resp.Body.Close()
-
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return "", err
-	}
-
-	var hello server.Hello
-	if err := json.Unmarshal(body, &hello); err != nil {
-		return "", err
-	}
-	ret := fmt.Sprintf("Hello %s", hello.Hello)
-	return ret, nil
 }

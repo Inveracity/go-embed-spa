@@ -8,9 +8,9 @@ import (
 
 var versionNumber = "dev"
 
-type Version struct{}
+type CmdVersion struct{}
 
-func (c *Version) Command() *cobra.Command {
+func (c *CmdVersion) Command() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "version",
 		Short: "print version",

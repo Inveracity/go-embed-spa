@@ -5,18 +5,16 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type Server struct {
+type CmdServer struct {
 }
 
-func (s *Server) Command() *cobra.Command {
+func (s *CmdServer) Command() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "server",
 		Short: "run server",
-
 		RunE: func(cmd *cobra.Command, args []string) error {
 			port, _ := cmd.Flags().GetUint("port")
 			return s.run(port)
-
 		},
 	}
 
@@ -25,9 +23,7 @@ func (s *Server) Command() *cobra.Command {
 	return cmd
 }
 
-func (s *Server) run(port uint) error {
-
+func (s *CmdServer) run(port uint) error {
 	server.Server(port)
-
 	return nil
 }
