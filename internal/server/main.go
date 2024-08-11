@@ -12,6 +12,7 @@ import (
 func Server(port uint) {
 	e := echo.New()
 	e.HideBanner = true
+	e.HidePort = true
 
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
 		Format: "${method} ${status} ${uri}\n",
@@ -28,6 +29,6 @@ func Server(port uint) {
 	e.GET("/stream/memory", events.StreamMemory)
 	e.GET("/stream/syslog", events.StreamSyslog)
 	e.GET("/*", echo.StaticDirectoryHandler(ui.DistDirFS, false))
-
+	fmt.Printf("⇨ http server started on http://0.0.0.0:%v\n", port)
 	e.Logger.Fatal(e.Start(fmt.Sprintf("0.0.0.0:%v", port)))
 }

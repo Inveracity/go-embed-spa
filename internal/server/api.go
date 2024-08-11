@@ -9,6 +9,10 @@ import (
 type Api struct {
 }
 
+type Hello struct {
+	Hello string `json:"hello"`
+}
+
 func (a *Api) Hello(c echo.Context) error {
-	return c.JSON(http.StatusOK, map[string]string{"hello": "World!"})
+	return c.JSON(http.StatusOK, Hello{Hello: "world"})
 }

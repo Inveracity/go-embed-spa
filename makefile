@@ -19,4 +19,7 @@ docker-build:
 docker-run:
 	@docker run --rm --name svelte-server -p3000:3000 svelte-server:latest server -p 3000 --apiport 3001
 
-.PHONY: install-ui build server dev docker-build docker-run
+lint:
+	@golangci-lint run
+
+.PHONY: install-ui build server dev docker-build docker-run lint
