@@ -40,6 +40,7 @@ func (a *App) Run() error {
 
 	rootCmd.AddCommand((&CmdVersion{}).Command())
 	rootCmd.AddCommand((&CmdHello{Client: &a.Client}).Command())
+	rootCmd.AddCommand((&CmdMemory{Client: &a.Client}).Command())
 	rootCmd.AddCommand((&CmdServer{}).Command())
 	rootCmd.Root().CompletionOptions.DisableDefaultCmd = true
 

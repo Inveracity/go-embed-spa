@@ -1,9 +1,11 @@
 package client
 
 import (
+	"bufio"
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 
 	"github.com/inveracity/go-embed-spa/internal/common"
@@ -37,4 +39,24 @@ func (c *Client) Hello() (string, error) {
 
 	ret := fmt.Sprintf("Hello %s", hello.Hello)
 	return ret, nil
+}
+
+func (c *Client) Memory() (string, error) {
+	url := fmt.Sprintf("%s/stream/memory", c.ENDPOINT)
+	resp, err := http.Get(url)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	reader := bufio.NewReader(resp.Body)
+
+	for {
+		line, err := reader.ReadBytes('\n')
+		if err != nil {
+			return "", err
+		}
+
+		log.Println(string(line))
+	}
 }
