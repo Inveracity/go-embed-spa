@@ -14,13 +14,13 @@ func (s *CmdServer) Command() *cobra.Command {
 		Short:  "run server",
 		Hidden: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			port, _ := cmd.Flags().GetUint("port")
+			port, _ := cmd.Flags().GetUint("server-port")
 			return s.run(port)
 		},
 	}
 
 	cmd.Flags().SortFlags = false
-	cmd.PersistentFlags().UintP("port", "p", 3000, "--port=3000 | -p 3000")
+	cmd.PersistentFlags().UintP("server-port", "p", 3000, "--server-port=3000 | -p 3000")
 	return cmd
 }
 
