@@ -3,6 +3,7 @@ module github.com/inveracity/go-embed-spa
 go 1.22.2
 
 require (
+	github.com/hpcloud/tail v1.0.0
 	github.com/labstack/echo/v4 v4.12.0
 	github.com/lithammer/dedent v1.1.0
 	github.com/pkg/errors v0.9.1
@@ -11,9 +12,9 @@ require (
 )
 
 require (
+	github.com/fsnotify/fsnotify v1.7.0 // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
-	github.com/hpcloud/tail v1.0.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/labstack/gommon v0.4.2 // indirect
 	github.com/lufia/plan9stats v0.0.0-20211012122336-39d0f177ccd0 // indirect
