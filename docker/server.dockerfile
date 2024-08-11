@@ -13,7 +13,7 @@ COPY makefile /server/makefile
 COPY --chmod=755 scripts/install_upx.sh /server/scripts/install_upx.sh
 RUN make build
 RUN make install-upx
-RUN upx -f -5 bin/cli
+RUN make compress
 
 FROM scratch
 

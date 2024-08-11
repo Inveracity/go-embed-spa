@@ -28,4 +28,7 @@ lint:
 
 install-upx: /usr/local/bin/upx
 
-.PHONY: install-ui build server dev docker-build docker-run lint install-upx
+compress: install-upx bin/cli
+	@upx --force-overwrite -5 -q bin/cli
+
+.PHONY: install-ui build server dev docker-build docker-run lint install-upx compress
