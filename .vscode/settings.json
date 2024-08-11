@@ -1,4 +1,12 @@
 {
+    "files.exclude": {
+        "ui/.prettierrc": true,
+        "ui/.prettierignore": true,
+        "ui/.gitignore": true,
+        "ui/.parcelrc": true,
+        "ui/*.config.*": true,
+        "ui/*.json": true,
+    },
     "html.format.wrapAttributes": "force-aligned",
     "[svelte]": {
         "editor.detectIndentation": false,
