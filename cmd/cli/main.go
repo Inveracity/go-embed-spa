@@ -1,25 +1,20 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
+	"github.com/fatih/color"
 	cmd "github.com/inveracity/go-embed-spa/internal/cli"
-	"github.com/pkg/errors"
 )
-
-type stackTracer interface {
-	StackTrace() errors.StackTrace
-}
 
 func main() {
 	cli := cmd.New()
 	err := cli.Run()
-
+	if !cli.NoColor {
+		color.Set(color.FgRed, color.Bold)
+		defer color.Unset() // This is probably not needed
+	}
 	if err != nil {
-		errWithStack := errors.Cause(err).(stackTracer)
-		st := errWithStack.StackTrace()
-		fmt.Printf("%+v\n", st[0:])
 		log.Fatalf("%s", err.Error())
 	}
 }

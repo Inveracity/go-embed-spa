@@ -35,8 +35,14 @@ func StreamMemory(c echo.Context) error {
 }
 
 func sendMemory(w *echo.Response) error {
-	v, _ := mem.VirtualMemory()
-	b, _ := json.Marshal(v)
+	v, err := mem.VirtualMemory()
+	if err != nil {
+		return err
+	}
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
 	event := Event{
 		Event: []byte("memory"),
 		Data:  b,

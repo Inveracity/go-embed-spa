@@ -7,8 +7,8 @@ import (
 )
 
 type App struct {
-	Version string
 	Client  client.Client
+	NoColor bool
 }
 
 func New() *App {
@@ -23,8 +23,12 @@ func (a *App) Run() error {
 			usage: cli --help
 			`,
 		),
-		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+		PersistentPreRunE: func(cmd *cobra.Command, args []string) (err error) {
 			InitializeEnv(cmd)
+			a.NoColor, err = cmd.Flags().GetBool("no-color")
+			if err != nil {
+				return err
+			}
 			endpoint, err := cmd.Flags().GetString("endpoint")
 			if err != nil {
 				return err
@@ -36,7 +40,8 @@ func (a *App) Run() error {
 			return cmd.Help()
 		},
 	}
-	rootCmd.PersistentFlags().String("endpoint", "http://localhost:3000", "--endpoint=http://localhost:3000")
+	rootCmd.PersistentFlags().String("endpoint", "http://localhost:3000", "set the http endpoint of the server")
+	rootCmd.PersistentFlags().Bool("no-color", false, "disable colored output")
 
 	rootCmd.AddCommand((&CmdVersion{}).Command())
 	rootCmd.AddCommand((&CmdHello{Client: &a.Client}).Command())

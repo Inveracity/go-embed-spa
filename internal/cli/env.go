@@ -2,6 +2,7 @@ package cli
 
 import (
 	"fmt"
+	"log"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -24,7 +25,9 @@ func bindFlags(cmd *cobra.Command, v *viper.Viper) {
 		configName := f.Name
 		if !f.Changed && v.IsSet(configName) {
 			val := v.Get(configName)
-			cmd.Flags().Set(f.Name, fmt.Sprintf("%v", val))
+			if err := cmd.Flags().Set(f.Name, fmt.Sprintf("%v", val)); err != nil {
+				log.Panic(err)
+			}
 		}
 	})
 }

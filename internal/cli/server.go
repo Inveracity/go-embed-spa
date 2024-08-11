@@ -11,7 +11,7 @@ type CmdServer struct {
 func (s *CmdServer) Command() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:    "server",
-		Short:  "run server",
+		Short:  "Run server",
 		Hidden: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			port, _ := cmd.Flags().GetUint("server-port")

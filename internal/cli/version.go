@@ -13,7 +13,7 @@ type CmdVersion struct{}
 func (c *CmdVersion) Command() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "version",
-		Short: "print version",
+		Short: "Print version",
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println(versionNumber)
 		},
