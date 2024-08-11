@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
+	"strings"
 
 	"github.com/inveracity/go-embed-spa/internal/common"
 )
@@ -56,7 +56,10 @@ func (c *Client) Memory() (string, error) {
 		if err != nil {
 			return "", err
 		}
-
-		log.Println(string(line))
+		l := string(line)
+		if strings.Contains(l, "data:") {
+			content := strings.Split(l, "data: ")
+			fmt.Println(content)
+		}
 	}
 }
