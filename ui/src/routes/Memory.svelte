@@ -1,10 +1,10 @@
 <script lang="ts">
-  import BACKEND_BASE_URL from '$lib/config';
-  import { es, memoryMsgs, subscribe, unsubscribe } from '$lib/events';
-  import { type Memory } from '$lib/types';
+  import { memoryMessages } from '$lib/store';
+  import { Streamer } from '$lib/stream';
   import Square from 'lucide-svelte/icons/square';
   import { onDestroy, onMount } from 'svelte';
 
+  const s = new Streamer('/stream/memory', memoryMessages);
   let squarray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
   let mem;
 
@@ -21,28 +21,17 @@
   }
 
   $: mem = Number(
-    (Math.round(($memoryMsgs?.usedPercent || 0) * 100) / 100).toFixed(2),
+    (Math.round((Number($memoryMessages.msg) || 0) * 100) / 100).toFixed(2),
   );
 
   $: squarray = flipArrayBasedOnPercentage(squarray, mem);
 
-  const memHandler = async (event: MessageEvent<any>) => {
-    if (event.data) {
-      const data: Memory = JSON.parse(event.data);
-      memoryMsgs.set(data);
-      return () => $es.close();
-    }
-  };
-
   onMount(() => {
-    es.set(new EventSource(`${BACKEND_BASE_URL}/stream/memory`));
-    $es.addEventListener('memory', memHandler, false);
-    subscribe($es);
+    s.connect();
   });
 
   onDestroy(() => {
-    $es.removeEventListener('memory', memHandler, false);
-    unsubscribe($es);
+    s.disconnect();
   });
 </script>
 

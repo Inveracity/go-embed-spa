@@ -1,11 +1,11 @@
 <script lang="ts">
   import BACKEND_BASE_URL from '$lib/config';
-  import { apiData } from '$lib/store';
-  import { messages, Streamer } from '$lib/stream';
+  import { apiData, timeMessages } from '$lib/store';
+  import { Streamer } from '$lib/stream';
   import type { Hello } from '$lib/types';
   import { onDestroy, onMount } from 'svelte';
 
-  const s = new Streamer('/stream/time', messages);
+  const s = new Streamer('/stream/time', timeMessages);
 
   onMount(async () => {
     const response = await fetch(`${BACKEND_BASE_URL}/api`);
@@ -22,5 +22,5 @@
 
 <div class="p-[10vh] text-center">
   <h1>Hello {$apiData.hello}</h1>
-  {$messages.msg}
+  {$timeMessages.msg}
 </div>

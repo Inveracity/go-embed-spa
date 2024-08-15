@@ -2,6 +2,7 @@ package events
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"time"
 
@@ -13,7 +14,7 @@ func StreamMemory(c echo.Context) error {
 	log.Printf("SSE client connected to memory stream, ip: %v", c.RealIP())
 
 	w := c.Response()
-	w.Header().Set("Content-Type", "text/event-stream")
+	w.Header().Set("Content-Type", "application/stream+json")
 	w.Header().Set("Cache-Control", "no-cache")
 	w.Header().Set("Connection", "keep-alive")
 
@@ -39,15 +40,9 @@ func sendMemory(w *echo.Response) error {
 	if err != nil {
 		return err
 	}
-	b, err := json.Marshal(v)
-	if err != nil {
-		return err
-	}
-	event := Event{
-		Event: []byte("memory"),
-		Data:  b,
-	}
-	if err := event.MarshalTo(w); err != nil {
+
+	enc := json.NewEncoder(w)
+	if err := enc.Encode(Msg{Msg: fmt.Sprintf("%v", v.UsedPercent), EventType: "memory"}); err != nil {
 		return err
 	}
 	w.Flush()

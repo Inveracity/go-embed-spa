@@ -1,9 +1,8 @@
 package events
 
 import (
-	"fmt"
+	"encoding/json"
 	"log"
-	"time"
 
 	"github.com/hpcloud/tail"
 	"github.com/labstack/echo/v4"
@@ -12,7 +11,7 @@ import (
 func StreamSyslog(c echo.Context) error {
 	log.Printf("SSE client connected to syslog stream, ip: %v", c.RealIP())
 	w := c.Response()
-	w.Header().Set("Content-Type", "text/event-stream")
+	w.Header().Set("Content-Type", "application/stream+json")
 	w.Header().Set("Cache-Control", "no-cache")
 	w.Header().Set("Connection", "keep-alive")
 
@@ -39,17 +38,14 @@ func syslogRead(c chan string) {
 		panic(err)
 	}
 	for line := range t.Lines {
-		time.Sleep(80 * time.Microsecond)
+		// time.Sleep(80 * time.Microsecond)
 		c <- line.Text
 	}
 }
 
 func syslogSend(result string, w *echo.Response) error {
-	event := Event{
-		Event: []byte("syslog"),
-		Data:  []byte(fmt.Sprint(result)),
-	}
-	if err := event.MarshalTo(w); err != nil {
+	enc := json.NewEncoder(w)
+	if err := enc.Encode(Msg{Msg: result, EventType: "syslog"}); err != nil {
 		return err
 	}
 	w.Flush()

@@ -15,13 +15,11 @@ export class Streamer {
   private url: string
   private controller: AbortController
   private streaming: Writable<MsgTypes>
-  private arr: MsgEvent[] | undefined
 
-  constructor(url: string, writableStore: Writable<MsgTypes>, array: MsgEvent[]) {
+  constructor(url: string, writableStore: Writable<MsgTypes>) {
     this.url = url
     this.controller = new AbortController;
     this.streaming = writableStore
-    this.arr = array
   }
 
 
@@ -37,13 +35,19 @@ export class Streamer {
       }
 
       const chunk = decoder.decode(value, { stream: true });
-      let res: MsgEvent = JSON.parse(chunk)
-      if (this.arr) {
-        console.log(this.arr)
+      let chunks = chunk.split("\n")
+      for (const chunky of chunks) {
+        let res: MsgEvent = JSON.parse(chunky)
+
+        // This is a fantastically terrible way to solve this.
+        try {
+          this.streaming.update(x => [...x, res])
+        } catch {
+          this.streaming.set(res)
+        }
+
         return read();
       }
-      this.streaming.set(res)
-      return read();
     }
 
     return read();
@@ -73,6 +77,7 @@ export class Streamer {
     }
 
     finally {
+      this.disconnect()
       this.controller = new AbortController;
     }
   }
