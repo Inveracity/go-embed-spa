@@ -1,37 +1,33 @@
 <script lang="ts">
-  import BACKEND_BASE_URL from '$lib/config';
-  import { es, subscribe, syslogMsgs, unsubscribe } from '$lib/events';
+  import { syslogMsgs } from '$lib/events';
+  import { syslogMessages } from '$lib/store';
+  import { Streamer } from '$lib/stream';
   import LoaderCircle from 'lucide-svelte/icons/loader-circle';
-  import { onDestroy, onMount, tick } from 'svelte';
+  import { onDestroy, onMount } from 'svelte';
   let scrollAreaElement: Element;
 
-  async function syslogHandler(event: MessageEvent<any>) {
-    const data = event.data;
-    if (data !== undefined) {
-      $syslogMsgs = [...$syslogMsgs, data];
-      scrollToBottom(scrollAreaElement);
-      await tick();
-    }
-    return () => $es.close();
-  }
+  const s = new Streamer('/stream/syslog', syslogMessages);
 
-  onMount(() => {
-    es.set(new EventSource(`${BACKEND_BASE_URL}/stream/syslog`));
-    $es.addEventListener('syslog', syslogHandler, false);
-    subscribe($es);
+  onMount(async () => {
+    s.connect();
   });
 
   onDestroy(() => {
-    $es.removeEventListener('syslog', syslogHandler, false);
-    unsubscribe($es);
-    $syslogMsgs.length = 0; // zero out the array after unsubscribing
+    s.disconnect();
+    $syslogMessages.length = 0;
   });
 
+  $: if ($syslogMessages) {
+    scrollToBottom(scrollAreaElement);
+  }
+
   const scrollToBottom = async (node: Element) => {
-    node.scroll({
-      top: node.scrollHeight,
-      behavior: 'instant',
-    });
+    if (node) {
+      node.scroll({
+        top: node.scrollHeight,
+        behavior: 'smooth',
+      });
+    }
   };
 </script>
 
@@ -44,8 +40,8 @@
     bind:this={scrollAreaElement}
     class=" bg-muted/100 h-[70vh] w-[80%] overflow-auto rounded-md border">
     <div class="p-5">
-      {#each $syslogMsgs as msg}
-        <p class="text-nowrap font-mono text-sm">{msg}</p>
+      {#each $syslogMessages as msg}
+        <p class="text-nowrap font-mono text-sm">{msg.msg}</p>
       {/each}
     </div>
   </div>

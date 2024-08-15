@@ -1,6 +1,7 @@
 package events
 
 import (
+	"encoding/json"
 	"log"
 	"time"
 
@@ -11,7 +12,7 @@ func TimeStream(c echo.Context) error {
 	log.Printf("SSE client connected to time stream, ip: %v", c.RealIP())
 
 	w := c.Response()
-	w.Header().Set("Content-Type", "text/event-stream")
+	w.Header().Set("Content-Type", "application/stream+json")
 	w.Header().Set("Cache-Control", "no-cache")
 	w.Header().Set("Connection", "keep-alive")
 
@@ -33,13 +34,16 @@ func TimeStream(c echo.Context) error {
 }
 
 func sendTime(w *echo.Response) error {
-	event := Event{
-		Event: []byte("time"),
-		Data:  []byte(time.Now().Format(time.RFC1123)),
+	message := Msg{
+		Msg:       time.Now().Format(time.RFC1123),
+		EventType: "time",
 	}
-	if err := event.MarshalTo(w); err != nil {
+
+	enc := json.NewEncoder(w)
+	if err := enc.Encode(message); err != nil {
 		return err
 	}
+
 	w.Flush()
 	return nil
 }
