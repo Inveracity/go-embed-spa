@@ -35,11 +35,12 @@ export class Streamer {
       }
 
       const chunk = decoder.decode(value, { stream: true });
+      //TODO: there might be newlines in the msg field, maybe the string should be base64 encoded?
       let chunks = chunk.split("\n")
       for (const chunky of chunks) {
         let res: MsgEvent = JSON.parse(chunky)
 
-        // This is a fantastically terrible way to solve this.
+        //TOD: This is a fantastically terrible way to solve this.
         try {
           this.streaming.update(x => [...x, res])
         } catch {
